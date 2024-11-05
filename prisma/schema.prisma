@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  idUser     Int      @id @default(autoincrement())
+  Name       String   @db.VarChar(50)
+  Gmail      String   @db.VarChar(60)
+  Pwd        String   @db.VarChar(60)
+  start_time DateTime
+  End_time   DateTime
+
+  tasks Task[]
+}
+
+model Task {
+  idTask      Int    @id @default(autoincrement())
+  Title       String @db.VarChar(50)
+  Priority    String @db.VarChar(55)
+  Descrip     String @db.VarChar(60)
+  Status      String @db.VarChar(50)
+  Taskcol     String @db.VarChar(50)
+  User_idUser Int
+  user        User   @relation(fields: [User_idUser], references: [idUser], onDelete: Cascade)
+
+  activities Activities[]
+}
+
+model Activities {
+  idActivities Int      @id @default(autoincrement())
+  Title        String   @db.VarChar(50)
+  Start_time   DateTime
+  End_time     DateTime
+  Status       String   @db.VarChar(50)
+  Date         DateTime
+  Descrip      String   @db.VarChar(45)
+  Task_idTask  Int
+  task         Task     @relation(fields: [Task_idTask], references: [idTask], onDelete: Cascade)
+}
